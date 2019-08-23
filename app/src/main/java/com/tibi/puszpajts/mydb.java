@@ -38,7 +38,7 @@ public class myDB{
     public int getNumberofPlayers() {
         return selectRecords().getCount();
     }
-    public long removeRecords(nev nev) {
+    public long removeRecordsByName(nev nev) {
         return database.delete(dbstruct.DBNEV, dbstruct.NEV+"=?", new String[] {nev.getNev()});
     }
 }
