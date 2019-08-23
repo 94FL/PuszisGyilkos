@@ -1,6 +1,6 @@
 package com.tibi.puszpajts;
 
-public class dbstruct {
+public class dbStruct {
     public String DBNEV = "nevek";
     public String ID = "id";
     public String ID_TYPE = "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL";

@@ -5,10 +5,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class dbhelper extends SQLiteOpenHelper{
-    final static dbstruct dbstruct = new dbstruct();
+public class dbHelper extends SQLiteOpenHelper{
+    final static dbStruct dbstruct = new dbStruct();
 
-    public dbhelper(Context context) {
+    public dbHelper(Context context) {
         super(context, dbstruct.DBNEV, null, 1);
     }
 

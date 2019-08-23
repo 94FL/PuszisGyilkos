@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteDatabase;
 import com.tibi.puszpajts.dbhelper;
 import com.tibi.puszpajts.nev;
 
-public class mydb{
+public class myDB{
 
     private dbhelper dbhelper;
 
     private SQLiteDatabase database;
     final static dbstruct dbstruct = new dbstruct();
 
-    public mydb(Context context){
+    public myDB(Context context){
         dbhelper = new dbhelper(context);
         database = dbhelper.getWritableDatabase();
     }
