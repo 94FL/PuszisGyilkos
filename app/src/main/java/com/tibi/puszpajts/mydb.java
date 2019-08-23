@@ -5,18 +5,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.tibi.puszpajts.dbhelper;
+import com.tibi.puszpajts.dbHelper;
 import com.tibi.puszpajts.nev;
 
 public class myDB{
 
-    private dbhelper dbhelper;
+    private dbHelper dbhelper;
 
     private SQLiteDatabase database;
-    final static dbstruct dbstruct = new dbstruct();
+    final static dbStruct dbstruct = new dbStruct();
 
     public myDB(Context context){
-        dbhelper = new dbhelper(context);
+        dbhelper = new dbHelper(context);
         database = dbhelper.getWritableDatabase();
     }
 
