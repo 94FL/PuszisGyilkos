@@ -1,4 +1,4 @@
-package com.tibi.puszpajts;
+package com.tibor.szucs.puszisgyilkos;
 
 public class nev {
     private int puszipajtas;

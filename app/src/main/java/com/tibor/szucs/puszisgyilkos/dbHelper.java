@@ -1,6 +1,5 @@
-package com.tibi.puszpajts;
+package com.tibor.szucs.puszisgyilkos;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;

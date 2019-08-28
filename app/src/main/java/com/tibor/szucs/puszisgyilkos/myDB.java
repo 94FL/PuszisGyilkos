@@ -1,12 +1,11 @@
-package com.tibi.puszpajts;
+package com.tibor.szucs.puszisgyilkos;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.tibi.puszpajts.dbHelper;
-import com.tibi.puszpajts.nev;
+import com.tibor.szucs.puszisgyilkos.*;
 
 public class myDB{
 
