@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,7 +24,14 @@ public class adapter extends ArrayAdapter<nev> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.resztvevo_row, parent, false);
         }
         // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.textViewName);
+        final TextView tvName = (TextView) convertView.findViewById(R.id.textViewName);
+        CheckBox chk = (CheckBox) convertView.findViewById(R.id.checkBox);
+        chk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("click from "+tvName.getText());
+            }
+        });
         // Populate the data into the template view using the data object
         tvName.setText(nev.getNev());
         // Return the completed view to render on screen
