@@ -1,6 +1,7 @@
 package com.tibor.szucs.puszisgyilkos;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,16 +33,14 @@ public class MainActivity extends AppCompatActivity {
         final adapter adapter = new adapter(this, arrayOfUsers);
         ListView listView = (ListView) findViewById(R.id.lvItems);
         listView.setAdapter(adapter);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                byte[] arr = new byte[7];
-                new Random().nextBytes(arr);
-                adapter.add(new nev(new String(arr)));
+                adapter.add(new nev());
+                System.out.println(arrayOfUsers);
             }
         });
     }

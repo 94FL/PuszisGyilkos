@@ -1,18 +1,17 @@
 package com.tibor.szucs.puszisgyilkos;
 
+import android.text.Editable;
+
 public class nev {
     private int puszipajtas;
     private String nev;
 
-    public nev(String nev) {
-        this.nev = nev;
-    }
     public String getNev() {
         return nev;
     }
 
-    public void setNev(String nev) {
-        this.nev = nev;
+    public void setNev(Editable nev) {
+        this.nev = nev.toString();
     }
 
     public int getPuszipajtas() {
