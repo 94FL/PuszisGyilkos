@@ -44,16 +44,10 @@ public class adapter extends BaseAdapter {
         return position;
     }
 
-    public void updateList(ArrayList<nev> list) {
-        nevList = list;
-        notifyDataSetChanged();
-    }
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
-        // Get the data item for this position
         ViewHolder viewHolder = null;
         final nev neve = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
         LayoutInflater ly = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -65,12 +59,13 @@ public class adapter extends BaseAdapter {
         else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        final View convertViewF = convertView;
         viewHolder.del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 nevList.remove(position);
+                parent.removeViewInLayout(getView(position, convertViewF, parent));
                 notifyDataSetChanged();
-
             }
         });
         viewHolder.txt.addTextChangedListener(new TextWatcher() {
@@ -82,6 +77,7 @@ public class adapter extends BaseAdapter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 neve.setNev(charSequence.toString());
+                System.out.println(neve.getNev());
             }
 
             @Override
@@ -89,8 +85,8 @@ public class adapter extends BaseAdapter {
 
             }
         });
-        // Populate the data into the template view using the data object
-        // Return the completed view to render on screen
+
+        viewHolder.txt.requestFocus();
         return convertView;
     }
 }

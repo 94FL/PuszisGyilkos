@@ -6,8 +6,14 @@
     android:layout_height="fill_parent"
     android:background="#f4f4f4">
 
+    <ListView
+        android:id="@+id/lvItems_users"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -19,12 +25,16 @@
         android:foregroundGravity="bottom|right"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_users2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine" />
-
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="80dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foregroundGravity="bottom|right"
+        app:srcCompat="@android:drawable/ic_media_next" />
 </RelativeLayout>

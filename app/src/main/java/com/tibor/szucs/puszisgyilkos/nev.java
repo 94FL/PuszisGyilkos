@@ -2,7 +2,9 @@ package com.tibor.szucs.puszisgyilkos;
 
 import android.text.Editable;
 
-public class nev {
+import java.io.Serializable;
+
+public class nev implements Serializable {
     private int puszipajtas;
     private String nev;
 

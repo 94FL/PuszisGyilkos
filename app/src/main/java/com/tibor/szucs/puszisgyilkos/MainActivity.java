@@ -1,5 +1,6 @@
 package com.tibor.szucs.puszisgyilkos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,58 +19,61 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
-    static myDB mydb;
+public class MainActivity extends AppCompatActivity implements Serializable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mydb = new myDB(this);
-
-        final ArrayList<nev> arrayOfUsers = new ArrayList<nev>();
-        final adapter adapter = new adapter(this, arrayOfUsers);
-        final ListView listView = (ListView) findViewById(R.id.lvItems);
-        listView.setAdapter(adapter);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        final Intent intent = new Intent(this, UsersActivity.class);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //         .setAction("Action", null).show();
-                nev e = new nev();
-                arrayOfUsers.add(e);
-
-                for (nev as : arrayOfUsers) {
-                    System.out.println(as.getNev());
-                }
+                startActivityForResult(intent, 1);
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if (resultCode == 1) {
+                ArrayList<nev> returnString = (ArrayList<nev>)data.getSerializableExtra("users");
+                TextView textView = (TextView) findViewById(R.id.editText);
+                textView.setText(arrayToString(returnString));
+            }
+        }
+    }
+    public String arrayToString(ArrayList<nev> list) {
+        StringBuilder stb = new StringBuilder();
+        for (nev neve : list) {
+            stb.append(neve.getNev() + "\n");
+        }
+        return stb.toString();
     }
 }
