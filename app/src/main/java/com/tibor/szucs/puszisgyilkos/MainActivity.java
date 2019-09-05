@@ -18,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,16 +32,20 @@ public class MainActivity extends AppCompatActivity {
 
         final ArrayList<nev> arrayOfUsers = new ArrayList<nev>();
         final adapter adapter = new adapter(this, arrayOfUsers);
-        ListView listView = (ListView) findViewById(R.id.lvItems);
+        final ListView listView = (ListView) findViewById(R.id.lvItems);
         listView.setAdapter(adapter);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                adapter.add(new nev());
-                System.out.println(arrayOfUsers);
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //         .setAction("Action", null).show();
+                nev e = new nev();
+                arrayOfUsers.add(e);
+
+                for (nev as : arrayOfUsers) {
+                    System.out.println(as.getNev());
+                }
             }
         });
     }

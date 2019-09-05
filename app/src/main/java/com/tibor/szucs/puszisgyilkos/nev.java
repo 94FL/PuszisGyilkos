@@ -10,7 +10,7 @@ public class nev {
         return nev;
     }
 
-    public void setNev(Editable nev) {
+    public void setNev(String nev) {
         this.nev = nev.toString();
     }
 
