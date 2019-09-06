@@ -17,16 +17,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-public class UsersActivity extends AppCompatActivity {
+public class UsersActivity extends AppCompatActivity implements Serializable{
     static myDB mydb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
-        mydb = new myDB(this);
-        final ArrayList<nev> arrayOfUsers = new ArrayList<nev>();
+        ArrayList<nev> temp = (ArrayList<nev>)getIntent().getSerializableExtra("users");
+        final ArrayList<nev> arrayOfUsers = temp != null ? temp : new ArrayList<nev>();
         final adapter adapter = new adapter(this, arrayOfUsers);
         final ListView listView = (ListView) findViewById(R.id.lvItems_users);
         listView.setAdapter(adapter);
@@ -54,8 +56,10 @@ public class UsersActivity extends AppCompatActivity {
                     intent.putExtra("users", (ArrayList<nev>) arrayOfUsers);
                     setResult(1, intent);
                     finish();
+                } else if (arrayOfUsers.size() == new HashSet<nev>(arrayOfUsers).size()) {
+                    Toast.makeText(getApplicationContext(), "Törűld mán ki a duplákat", 1000).show();
                 } else {
-                    Toast.makeText(getApplicationContext(),"Adjá hozzá embereket", 1000).show();
+                    Toast.makeText(getApplicationContext(),"Adjá mán hozzá embereket", 1000).show();
                 }
             }
         });

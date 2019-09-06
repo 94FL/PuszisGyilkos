@@ -19,12 +19,12 @@
         android:foregroundGravity="bottom|right"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine" />
+        android:text="Tőrűlj már ki mindent pls" />
 
 </RelativeLayout>

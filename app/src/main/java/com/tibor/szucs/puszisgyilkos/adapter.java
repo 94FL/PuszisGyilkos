@@ -85,7 +85,7 @@ public class adapter extends BaseAdapter {
 
             }
         });
-
+        viewHolder.txt.setText(neve.getNev());
         viewHolder.txt.requestFocus();
         return convertView;
     }
