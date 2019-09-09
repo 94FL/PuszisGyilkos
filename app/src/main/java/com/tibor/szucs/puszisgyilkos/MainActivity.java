@@ -51,6 +51,8 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
@@ -58,22 +60,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private ArrayList<nev> intentData = new ArrayList<nev>();
     private ArrayList<nev> intentDataSize;
     private FloatingActionButton fab;
+    private boolean previouslyStarted = false;
     private File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getParent() + "/BuziMappa/");
     Intent intent;
     myDB db;
-    public MainActivity() {
-
-        /*db = new myDB(this);
-        Cursor cursor = db.selectRecords();
-        if(intentData.size() < 1) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                nev test = new nev();
-                test.setNev(cursor.getString(1));
-                intentData.add(test);
-                cursor.moveToNext();
-            }
-        }*/
-    }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +75,20 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         requestPermissions(perms, permsRequestCode);
 
         intent = new Intent(this, UsersActivity.class);
+
+        if (!previouslyStarted) {
+            db = new myDB(this.getApplicationContext());
+            Cursor cursor = db.selectRecords();
+            if(intentData.size() < 1) {
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    nev test = new nev();
+                    test.setNev(cursor.getString(1));
+                    intentData.add(test);
+                    cursor.moveToNext();
+                }
+            }
+            previouslyStarted = true;
+        }
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         Button kezdesBtn = (Button) findViewById(R.id.kezdesButton);
@@ -121,6 +125,45 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
     }
+
+
+    public String[] shuffle(String[] arr) {
+        String[] oldArray = arr;
+        int n = oldArray.length;
+        for (int i = 0; i < oldArray.length; i++) {
+            Random rand = new Random();
+            int random = rand.nextInt(n-i)+i;
+            String randomElement = oldArray[random];
+            oldArray[random] = oldArray[i];
+            oldArray[i] = randomElement;
+        }
+        for(int i = 0; i < oldArray.length; i++) {
+            if(oldArray[i].equals(directory.list()[i])) {
+                shuffle(oldArray);
+            } else { }
+        }
+        return oldArray;
+    }
+
+    public String[] shuffle() {
+        String[] oldArray = directory.list();
+        int n = oldArray.length;
+        for (int i = 0; i < oldArray.length; i++) {
+            Random rand = new Random();
+            int random = rand.nextInt(n-i)+i;
+            String randomElement = oldArray[random];
+            oldArray[random] = oldArray[i];
+            oldArray[i] = randomElement;
+        }
+        for(int i = 0; i < oldArray.length; i++) {
+            if(oldArray[i].equals(directory.list()[i])) {
+                shuffle(oldArray);
+            } else {}
+        }
+        return oldArray;
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -165,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //renameToRandom(directory.list());
+                renameToRandom(shuffle());
             }
         }
     }
@@ -203,18 +246,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
     public void renameToRandom(String[] oldArray) {
-        int n = oldArray.length;
-        System.out.println(Arrays.asList(oldArray));
         File[] fileList = directory.listFiles();
-        for (int i = 0; i < oldArray.length; i++) {
-            int random = i + (int) (Math.random() * (n - i));
-            String randomElement = oldArray[random];
-            oldArray[random] = oldArray[i];
-            oldArray[i] = randomElement;
-        }
-        System.out.println(Arrays.asList(oldArray));
+        System.out.println(fileList.length);
         for (int i = 0; i < oldArray.length; i++) {
             File f = new File(directory.getAbsolutePath()+"/"+oldArray[i]);
+            System.out.println(f.getAbsolutePath()+" to "+fileList[i]);
             f.renameTo(fileList[i]);
         }
     }
