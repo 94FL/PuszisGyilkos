@@ -21,11 +21,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UsersActivity extends AppCompatActivity implements Serializable{
-    static myDB mydb;
+    myDB mydb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
+
+        mydb = new myDB(getApplicationContext());
 
         ArrayList<nev> temp = (ArrayList<nev>)getIntent().getSerializableExtra("users");
         final ArrayList<nev> arrayOfUsers = temp != null ? temp : new ArrayList<nev>();
@@ -52,11 +54,16 @@ public class UsersActivity extends AppCompatActivity implements Serializable{
             @Override
             public void onClick(View view) {
                 if (! arrayOfUsers.isEmpty()) {
+                    for (nev nev: arrayOfUsers) {
+                        System.out.println(nev.getNev());
+                        myDB.createRecords(nev);
+                    }
                     Intent intent = new Intent();
                     intent.putExtra("users", (ArrayList<nev>) arrayOfUsers);
                     setResult(1, intent);
                     finish();
-                } else if (arrayOfUsers.size() == new HashSet<nev>(arrayOfUsers).size()) {
+                }
+                else if (arrayOfUsers.size() != new HashSet<nev>(arrayOfUsers).size()) {
                     Toast.makeText(getApplicationContext(), "Törűld mán ki a duplákat", 1000).show();
                 } else {
                     Toast.makeText(getApplicationContext(),"Adjá mán hozzá embereket", 1000).show();

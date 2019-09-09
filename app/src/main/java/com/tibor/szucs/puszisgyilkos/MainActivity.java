@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,10 +54,26 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
+    private Context context;
     private ArrayList<nev> intentData = new ArrayList<nev>();
+    private ArrayList<nev> intentDataSize;
     private FloatingActionButton fab;
     private File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getParent() + "/BuziMappa/");
     Intent intent;
+    myDB db;
+    public MainActivity() {
+
+        /*db = new myDB(this);
+        Cursor cursor = db.selectRecords();
+        if(intentData.size() < 1) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                nev test = new nev();
+                test.setNev(cursor.getString(1));
+                intentData.add(test);
+                cursor.moveToNext();
+            }
+        }*/
+    }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +85,21 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         requestPermissions(perms, permsRequestCode);
 
         intent = new Intent(this, UsersActivity.class);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        Button kezdesBtn = (Button) findViewById(R.id.kezdesButton);
+        Button kepekBtn = (Button) findViewById(R.id.kepNyit);
+        Button szabaly = (Button) findViewById(R.id.szabalyok);
+
+        kepekBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setDataAndType(Uri.parse(directory.getPath()), "resource/folder");
+                startActivity(Intent.createChooser(intent, "Nyiss meg eggy fálylkeresőt"));
+            }
+        });
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,17 +115,22 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                        file.delete();
                    }
                    intentData = new ArrayList<nev>();
+                   intent.removeExtra("users");
+                   db.removeAllRecords();
                 }
             }
         });
     }
-
     @Override
     public void onResume() {
         super.onResume();
         if (intentData.size()!=0) {
             intent.putExtra("users", (ArrayList<nev>) intentData);
         }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                renameToRandom(directory.list());
+                //renameToRandom(directory.list());
             }
         }
     }
@@ -166,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
     public void renameToRandom(String[] oldArray) {
         int n = oldArray.length;
+        System.out.println(Arrays.asList(oldArray));
         File[] fileList = directory.listFiles();
         for (int i = 0; i < oldArray.length; i++) {
             int random = i + (int) (Math.random() * (n - i));
@@ -173,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             oldArray[random] = oldArray[i];
             oldArray[i] = randomElement;
         }
+        System.out.println(Arrays.asList(oldArray));
         for (int i = 0; i < oldArray.length; i++) {
             File f = new File(directory.getAbsolutePath()+"/"+oldArray[i]);
             f.renameTo(fileList[i]);

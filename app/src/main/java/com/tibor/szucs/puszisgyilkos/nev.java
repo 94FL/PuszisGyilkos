@@ -5,7 +5,7 @@ import android.text.Editable;
 import java.io.Serializable;
 
 public class nev implements Serializable {
-    private int puszipajtas;
+    private int id;
     private String nev;
 
     public String getNev() {
@@ -16,11 +16,11 @@ public class nev implements Serializable {
         this.nev = nev.toString();
     }
 
-    public int getPuszipajtas() {
-        return puszipajtas;
+    public int getId() {
+        return id;
     }
 
-    public void setPuszipajtas(int puszipajtas) {
-        this.puszipajtas = puszipajtas;
+    public void setId(int puszipajtas) {
+        this.id = id;
     }
 }

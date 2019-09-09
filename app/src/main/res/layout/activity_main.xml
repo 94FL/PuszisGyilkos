@@ -6,6 +6,11 @@
     android:layout_height="fill_parent"
     android:background="#f4f4f4">
 
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="294dp"
+        android:src="@drawable/rickroll" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -19,12 +24,55 @@
         android:foregroundGravity="bottom|right"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tőrűlj már ki mindent pls" />
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <Button
+            android:id="@+id/kezdesButton"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="KEZGYÉ" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="1" />
+
+
+        <Button
+            android:id="@+id/kepNyit"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NYIZSD MÁ MEG A KÍPEKET" />
+        <Button
+            android:id="@+id/szabalyok"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SZABÁJOK" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1" />
+
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Tőrűlj már ki mindent pls" />
+
+
+    </LinearLayout>
 
 </RelativeLayout>

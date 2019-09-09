@@ -11,7 +11,7 @@ public class myDB{
 
     private dbHelper dbhelper;
 
-    private SQLiteDatabase database;
+    private static SQLiteDatabase database;
     final static dbStruct dbstruct = new dbStruct();
 
     public myDB(Context context){
@@ -19,10 +19,10 @@ public class myDB{
         database = dbhelper.getWritableDatabase();
     }
 
-    public long createRecords(nev nev){
+    public static long createRecords(nev nev){
         ContentValues values = new ContentValues();
         values.put(dbstruct.NEV, nev.getNev());
-        return database.insert(dbstruct.DBNEV, null, values);
+        return database.insertWithOnConflict(dbstruct.DBNEV, null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     public Cursor selectRecords() {
@@ -32,10 +32,13 @@ public class myDB{
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
-        return mCursor; // iterate to get each value.
+        return mCursor;
     }
     public int getNumberofPlayers() {
         return selectRecords().getCount();
+    }
+    public long removeAllRecords() {
+        return database.delete(dbstruct.DBNEV, "1=1", new String[] {});
     }
     public long removeRecordsByName(nev nev) {
         return database.delete(dbstruct.DBNEV, dbstruct.NEV+"=?", new String[] {nev.getNev()});

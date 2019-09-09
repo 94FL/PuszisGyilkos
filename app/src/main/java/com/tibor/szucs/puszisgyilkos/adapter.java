@@ -77,7 +77,6 @@ public class adapter extends BaseAdapter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 neve.setNev(charSequence.toString());
-                System.out.println(neve.getNev());
             }
 
             @Override
