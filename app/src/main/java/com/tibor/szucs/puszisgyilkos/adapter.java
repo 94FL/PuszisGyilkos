@@ -3,6 +3,7 @@ package com.tibor.szucs.puszisgyilkos;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;

@@ -15,7 +15,11 @@
             android:id="@+id/txt"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:hint="Adj meg egy nevet" />
+            android:focusableInTouchMode="true"
+            android:hint="Adj meg egy nevet"
+            android:selectAllOnFocus="true"
+            android:inputType="textNoSuggestions"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Space

@@ -39,8 +39,10 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -52,7 +54,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         if (!previouslyStarted) {
             db = new myDB(this.getApplicationContext());
             Cursor cursor = db.selectRecords();
-            if(intentData.size() < 1) {
+            if (intentData.size() < 1) {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     nev test = new nev();
                     test.setNev(cursor.getString(1));
@@ -99,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setDataAndType(Uri.parse(directory.getPath()), "resource/folder");
-                startActivity(Intent.createChooser(intent, "Nyiss meg eggy fálylkeresőt"));
+                intent.setDataAndType(Uri.parse(directory.getPath()), "image/*");
+                startActivity(intent);
             }
         });
 
@@ -115,52 +119,51 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onClick(View view) {
                 if (directory.exists() && directory.isDirectory() && directory.listFiles().length > 0) {
-                   for(File file : directory.listFiles()) {
-                       file.delete();
-                   }
-                   intentData = new ArrayList<nev>();
-                   intent.removeExtra("users");
-                   db.removeAllRecords();
+                    for (File file : directory.listFiles()) {
+                        file.delete();
+                    }
+                    intentData = new ArrayList<nev>();
+                    intent.removeExtra("users");
+                    db.removeAllRecords();
+                }
+            }
+        });
+        kezdesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!intentData.isEmpty()) {
+                    try {
+                        for (nev retStr : intentData) {
+                            generateQR(retStr.getNev());
+                        }
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    renameToRandom(shuffle(directory.list()));
+                    System.out.println(Arrays.asList(directory.list()));
+                    renameToJpg();
+                    System.out.println(Arrays.asList(directory.list()));
+                } else {
+                    Toast.makeText(getApplicationContext(), "Aggyá hozá nevekett", 1500).show();
                 }
             }
         });
     }
 
-
-    public String[] shuffle(String[] arr) {
-        String[] oldArray = arr;
-        int n = oldArray.length;
-        for (int i = 0; i < oldArray.length; i++) {
-            Random rand = new Random();
-            int random = rand.nextInt(n-i)+i;
-            String randomElement = oldArray[random];
-            oldArray[random] = oldArray[i];
-            oldArray[i] = randomElement;
+    public static String[] shuffle(String[] in) {
+        SortedSet<String> a = new TreeSet<String>(Arrays.asList(in));
+        String[] out = new String[a.size()];
+        for (int i = 0; i < in.length; i++) {
+            a.remove(in[i]);
+            Object[] tempList = a.toArray();
+            int rand = new Random().nextInt(a.size());
+            a.remove(tempList[rand]);
+            a.add(in[i]);
+            out[i] = (String) tempList[rand];
         }
-        for(int i = 0; i < oldArray.length; i++) {
-            if(oldArray[i].equals(directory.list()[i])) {
-                shuffle(oldArray);
-            } else { }
-        }
-        return oldArray;
-    }
-
-    public String[] shuffle() {
-        String[] oldArray = directory.list();
-        int n = oldArray.length;
-        for (int i = 0; i < oldArray.length; i++) {
-            Random rand = new Random();
-            int random = rand.nextInt(n-i)+i;
-            String randomElement = oldArray[random];
-            oldArray[random] = oldArray[i];
-            oldArray[i] = randomElement;
-        }
-        for(int i = 0; i < oldArray.length; i++) {
-            if(oldArray[i].equals(directory.list()[i])) {
-                shuffle(oldArray);
-            } else {}
-        }
-        return oldArray;
+        return out;
     }
 
 
@@ -191,6 +194,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         return super.onOptionsItemSelected(item);
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -199,16 +204,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             if (resultCode == 1) {
                 ArrayList<nev> returnString = (ArrayList<nev>)data.getSerializableExtra("users");
                 intentData = returnString;
-                try {
-                    for (nev retStr : returnString){
-                        generateQR(retStr.getNev());
-                    }
-                } catch (WriterException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                renameToRandom(shuffle());
             }
         }
     }
@@ -234,24 +229,44 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             directory.mkdirs();
         }
         File mypath = new File(directory, Normalizer.normalize(nev, Normalizer.Form.NFD)+".jpg");
-        if (! mypath.exists()) {
-            mypath.createNewFile();
+        if (mypath.createNewFile()) {
             FileOutputStream fout = new FileOutputStream(mypath);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fout);
             fout.flush();
             fout.close();
         }
         else {
-            Toast.makeText(getApplicationContext(), "Néhány fájl má létezik", 1000);
+            Toast.makeText(getApplicationContext(), "Valami ittet e nem stimmel", 1500).show();
         }
     }
     public void renameToRandom(String[] oldArray) {
-        File[] fileList = directory.listFiles();
-        System.out.println(fileList.length);
-        for (int i = 0; i < oldArray.length; i++) {
-            File f = new File(directory.getAbsolutePath()+"/"+oldArray[i]);
-            System.out.println(f.getAbsolutePath()+" to "+fileList[i]);
-            f.renameTo(fileList[i]);
+        File[] fileList = directory.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if(file.getAbsolutePath().endsWith(".jpg")) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        for (int i = 0; i < fileList.length; i++) {
+            File f = new File(fileList[i].getAbsolutePath());
+            File to = new File(directory.getAbsolutePath()+"/"+oldArray[i].substring(0, oldArray[i].length() - 4) + ".bak");
+            f.renameTo(to);
+        }
+    }
+    public void renameToJpg() {
+        File[] fileList = directory.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if(file.getAbsolutePath().endsWith(".bak")) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        for(File f : fileList) {
+            f.renameTo(new File(f.getAbsolutePath().substring(0, f.getAbsolutePath().length() - 4)+".jpg"));
         }
     }
 
