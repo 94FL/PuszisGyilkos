@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="Adj meg egy nevet"
+            android:inputType="textVisiblePassword|textNoSuggestions"
             android:selectAllOnFocus="true"
-            android:inputType="textNoSuggestions"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 

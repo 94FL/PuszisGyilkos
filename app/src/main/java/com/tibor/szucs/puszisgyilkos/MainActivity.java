@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private ArrayList<nev> intentDataSize;
     private FloatingActionButton fab;
     private boolean previouslyStarted = false;
-    private File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getParent() + "/BuziMappa/");
+    private File directory = new File(Environment.getExternalStorageDirectory()+"/BuziMappa/");
     Intent intent;
     myDB db;
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -141,10 +142,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    renameToRandom(shuffle(directory.list()));
-                    System.out.println(Arrays.asList(directory.list()));
-                    renameToJpg();
-                    System.out.println(Arrays.asList(directory.list()));
+                    renameJpgToRandomBak(shuffle(directory.list()));
+                    renameBakToJpg();
                 } else {
                     Toast.makeText(getApplicationContext(), "Aggyá hozá nevekett", 1500).show();
                 }
@@ -239,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             Toast.makeText(getApplicationContext(), "Valami ittet e nem stimmel", 1500).show();
         }
     }
-    public void renameToRandom(String[] oldArray) {
+    public void renameJpgToRandomBak(String[] oldArray) {
         File[] fileList = directory.listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             f.renameTo(to);
         }
     }
-    public void renameToJpg() {
+    public void renameBakToJpg() {
         File[] fileList = directory.listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {

@@ -53,20 +53,19 @@ public class UsersActivity extends AppCompatActivity implements Serializable{
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (! arrayOfUsers.isEmpty()) {
+                if (arrayOfUsers.size() != new HashSet<nev>(arrayOfUsers).size()) {
+                    Toast.makeText(getApplicationContext(), "Törűld mán ki a duplákat", 1000).show();
+                }
+                else if (arrayOfUsers.isEmpty()) {
+                    Toast.makeText(getApplicationContext(),"Adjá mán hozzá embereket", 1000).show();
+                } else {
                     for (nev nev: arrayOfUsers) {
-                        System.out.println(nev.getNev());
                         myDB.createRecords(nev);
                     }
                     Intent intent = new Intent();
                     intent.putExtra("users", (ArrayList<nev>) arrayOfUsers);
                     setResult(1, intent);
                     finish();
-                }
-                else if (arrayOfUsers.size() != new HashSet<nev>(arrayOfUsers).size()) {
-                    Toast.makeText(getApplicationContext(), "Törűld mán ki a duplákat", 1000).show();
-                } else {
-                    Toast.makeText(getApplicationContext(),"Adjá mán hozzá embereket", 1000).show();
                 }
             }
         });

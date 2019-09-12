@@ -1,11 +1,15 @@
 package com.tibor.szucs.puszisgyilkos;
 
 import android.content.Context;
+import android.os.Environment;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.File;
 
 import static org.junit.Assert.*;
 
@@ -22,5 +26,11 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         assertEquals("com.tibor.szucs.puszisgyilkos", appContext.getPackageName());
+    }
+    @Test
+    public void directoriesEqual() {
+        File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getParent() + "/BuziMappa/");
+        File dire = new File(Environment.getExternalStorageDirectory()+"/BuziMappa/");
+        assertEquals(directory.toString(), dire.toString());
     }
 }
